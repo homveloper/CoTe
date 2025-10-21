@@ -1,2 +1,4 @@
-def solution():
-    pass
+def solution(arr):
+    arr.sort()
+    return arr
+    
