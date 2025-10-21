@@ -100,21 +100,29 @@ git commit -m "add(problems) : 해시 주제 3문제 풀이 추가
 
 ```
 CoTe/
+├── _runners/                            # Test execution environment (multi-language support)
+│   ├── __init__.py                      # Test runner package
+│   ├── python.py                        # Python test runner (time/memory measurement)
+│   └── (future: go.py, java.py, etc.)
 ├── _template/                           # Reusable template for new problems
 │   ├── README.md                        # Problem documentation template
-│   └── solution.py                      # Code solution template
+│   ├── solution.py                      # Code solution template
+│   └── test.py                          # Test cases template (modify per problem, references _runners)
 │
 ├── 001_해시_두개뽑아서더하기/
 │   ├── README.md                        # Problem record with approach & reflections
-│   └── solution.py                      # Implementation
+│   ├── solution.py                      # Implementation (for Programmers submission)
+│   └── test.py                          # Test cases (modify per problem)
 │
 ├── 002_해시_완주하지못한선수/
 │   ├── README.md
-│   └── solution.py
+│   ├── solution.py
+│   └── test.py
 │
 └── NNN_주제_문제명/                      # Naming: {number}_{topic}_{problem}
     ├── README.md
-    └── solution.py
+    ├── solution.py
+    └── test.py
 ```
 
 ### Naming Convention
@@ -164,25 +172,76 @@ Each problem's `README.md` follows this structure:
 ```bash
 # 1. Copy template folder with new number, topic, and problem name
 cp -r _template 001_해시_두개뽑아서더하기
-
-# 2. Navigate to folder
 cd 001_해시_두개뽑아서더하기
 
-# 3. Edit README.md with problem approach and solution.py with code
-# 4. Test solution locally
-python3 solution.py
+# 2. Add test cases to test.py
+# (Copy input/output examples from Programmers problem page)
+# test.py automatically references the root _runners package
 
-# 5. Update main README.md table with new entry
-# 6. Commit changes
+# 3. Run tests locally
+python3 test.py
+
+# 4. Implement solution in solution.py
+# 5. Edit README.md with problem approach and reflections
+# 6. Update main README.md table with new entry
+# 7. Commit changes
 git add .
 git commit -m "add(001_해시) : 두개뽑아서더하기 문제 풀이"
 ```
 
-### Running a Solution
+### File Responsibilities
+- **test.py** (per problem): Test cases definition only (modify)
+- **solution.py** (per problem): Problem solution (modify)
+- **README.md** (per problem): Problem documentation (modify)
+- **_runners/** (root, shared): Test execution environment
+  - `__init__.py`: Package initialization
+  - `python.py`: Python test runner (DO NOT modify, shared by all Python problems)
+  - (future) `go.py`, `java.py`: Other language runners
+
+### Test Case Format
+
+```python
+test_cases = [
+    # 여러 매개변수: 튜플 사용 (언팩됨)
+    {
+        "name": "여러 인자",
+        "input": (1, 2, 3),      # 튜플 → solution(1, 2, 3)
+        "expected": 6,
+    },
+
+    # 단일 매개변수: 리스트, 문자열, 숫자 등 (그대로 전달)
+    {
+        "name": "단일 리스트",
+        "input": [1, 2, 3],      # 리스트 → solution([1, 2, 3])
+        "expected": [1, 2, 3],
+    },
+    {
+        "name": "단일 문자열",
+        "input": "hello",        # 문자열 → solution("hello")
+        "expected": "olleh",
+    },
+]
+```
+
+**규칙**:
+- **튜플** (`(a, b, c)`): 여러 인자로 언팩 → `solution(a, b, c)`
+- **그 외** (리스트, 문자열, 숫자): 단일 인자로 전달 → `solution(data)`
+
+### Testing Locally
 ```bash
 cd NNN_주제_문제명
-python3 solution.py
+
+# Edit test_cases in test.py with Programmers examples
+# Then run (automatically uses root _runners/python.py):
+python3 test.py
+
+# Output shows: ✓ 통과 or ✗ 실패, time, memory for each test case
 ```
+
+### Submitting to Programmers
+1. Copy the `solution()` function from `solution.py`
+2. Paste into Programmers problem editor
+3. Submit
 
 ### Updating Main README
 When adding new problems, update `/README.md`:
@@ -233,11 +292,34 @@ When reviewing solutions, prioritize:
 
 ### For Adding New Problems
 - `_template/README.md` - Documentation structure to follow
-- `_template/solution.py` - Code template
+- `_template/solution.py` - Code template (pure implementation)
+- `_template/test.py` - Test cases template (modify per problem, auto-references root `_runners`)
+
+### For Testing (Shared Infrastructure)
+- `_runners/` (root package) - Test execution environment (common, shared by all test.py)
+  - `__init__.py` - Package initialization (exports `run_tests`)
+  - `python.py` - Python test runner module
+    - Measures time and memory
+    - Handles test case execution
+    - Formats output
+    - **DO NOT modify**, shared by all Python problems
+  - (future) Other language runners: `go.py`, `java.py`, etc.
+
+### Test Execution Flow
+1. Run: `cd NNN_주제_문제명 && python3 test.py`
+2. `test.py` imports `run_tests` from `_runners` (root package)
+3. `_runners.python.run_tests()` imports `solution.py` from same folder
+4. Tests run with automatic time/memory measurement
 
 ### For Project Context
 - `README.md` - Project overview and index
 - `.gitignore` - Ignored files/directories
+
+### Separation of Concerns
+- **Modify per problem**: `README.md`, `solution.py`, `test.py` (test_cases array only)
+- **Common (shared, referenced)**: `_runners/` (root, multi-language test environment)
+  - Single point of maintenance for test logic
+  - Easy to add new language runners
 
 ## Guidelines for Claude
 
