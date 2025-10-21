@@ -45,5 +45,16 @@ test_cases = [
 # ============================================================
 # 테스트 실행 (수정 금지)
 # ============================================================
+
+from solution import solution
+from solution import bubble_solution, selection_solution
+
 if __name__ == "__main__":
-    run_tests(test_cases)
+    run_tests(solution, test_cases)
+    run_tests(bubble_solution, test_cases)
+    run_tests(selection_solution, test_cases)
+
+    # 다른 구현으로 테스트하려면:
+    # def my_solution(nums):
+    #     return sorted(nums)
+    # run_tests(my_solution, test_cases)
