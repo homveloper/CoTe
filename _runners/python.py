@@ -6,7 +6,6 @@ Python 테스트 실행 모듈
 
 import time
 import tracemalloc
-from solution import solution
 
 
 def format_memory(bytes_value):
@@ -18,16 +17,26 @@ def format_memory(bytes_value):
     return f"{bytes_value:.2f}TB"
 
 
-def run_tests(test_cases):
+def run_tests(func, test_cases):
     """
     테스트 케이스 실행
 
     Args:
-        test_cases: 테스트 케이스 리스트 (test.py에서 import)
+        func: 실행할 함수 (solution 함수 또는 다른 구현)
+        test_cases: 테스트 케이스 리스트
                    [{"name": "...", "input": ..., "expected": ...}, ...]
+
+    Examples:
+        from solution import solution
+        run_tests(solution, test_cases)
+
+        # 또는 다른 구현으로 테스트
+        def my_solution(data):
+            return sorted(data)
+        run_tests(my_solution, test_cases)
     """
     print("=" * 70)
-    print("테스트 시작")
+    print(f"테스트 시작 (함수: {func.__name__})")
     print("=" * 70 + "\n")
 
     passed_count = 0
@@ -47,9 +56,9 @@ def run_tests(test_cases):
 
             # 입력이 튜플이면 언팩(여러 인자), 아니면 그대로(단일 인자)
             if isinstance(input_data, tuple):
-                result = solution(*input_data)
+                result = func(*input_data)
             else:
-                result = solution(input_data)
+                result = func(input_data)
 
             # 시간과 메모리 측정
             end_time = time.perf_counter()

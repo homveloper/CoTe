@@ -299,6 +299,8 @@ When reviewing solutions, prioritize:
 - `_runners/` (root package) - Test execution environment (common, shared by all test.py)
   - `__init__.py` - Package initialization (exports `run_tests`)
   - `python.py` - Python test runner module
+    - `run_tests(func, test_cases)` function
+    - Takes solution function and test cases
     - Measures time and memory
     - Handles test case execution
     - Formats output
@@ -307,9 +309,11 @@ When reviewing solutions, prioritize:
 
 ### Test Execution Flow
 1. Run: `cd NNN_주제_문제명 && python3 test.py`
-2. `test.py` imports `run_tests` from `_runners` (root package)
-3. `_runners.python.run_tests()` imports `solution.py` from same folder
-4. Tests run with automatic time/memory measurement
+2. `test.py` imports `solution` from `solution.py`
+3. `test.py` imports `run_tests` from `_runners` (root package)
+4. `test.py` calls: `run_tests(solution, test_cases)`
+5. Tests run with automatic time/memory measurement
+6. Can also test alternative implementations: `run_tests(my_other_solution, test_cases)`
 
 ### For Project Context
 - `README.md` - Project overview and index

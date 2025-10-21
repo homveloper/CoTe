@@ -106,11 +106,19 @@ test_cases = [
 ### 3. 로컬 테스트
 ```bash
 # test.py 실행 (테스트 케이스 정의한 후)
-# 자동으로 프로젝트 루트의 _runners 폴더 참조
 python3 test.py
 
 # 출력: 통과/실패, 시간, 메모리 측정
-# _runners/python.py가 solution.py를 import하여 테스트 실행
+# test.py가 solution.py의 함수를 run_tests에 전달하여 실행
+```
+
+**다른 구현으로 테스트 (선택)**:
+```python
+# test.py에 추가로 작성
+def my_solution(nums):
+    return sorted(nums)
+
+run_tests(my_solution, test_cases)  # 다른 구현 테스트
 ```
 
 ### 4. 풀이 작성
