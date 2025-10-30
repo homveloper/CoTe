@@ -37,4 +37,35 @@ def solution(dirs):
         cx,cy = nx,ny
 
     return int(len(visited)/2)
-    
+
+def ValidatePosition(x, y, xrange, yrange) -> bool:
+    return -xrange <= x <= xrange and -yrange <= y <= yrange
+
+ 
+DIRECTIONS   = {
+        'U' : (0, 1),
+        'D' : (0, -1),
+        'R' : (1, 0),
+        'L' : (-1, 0)
+    }
+
+def NextPosition(directions, dir, x, y) -> tuple[int,int]:
+    dx, dy = directions.get(dir, (0,0))
+    return x + dx, y + dy
+
+def solutionv2(dirs):
+    visited = set()
+    cx, cy = 0, 0
+    xrange, yrange = 5, 5
+
+    for dir in dirs:
+        nx, ny = NextPosition(DIRECTIONS, dir, cx, cy)
+        if not ValidatePosition(nx, ny, xrange, yrange):
+            continue
+
+        edge = tuple(sorted([(cx, cy), (nx, ny)]))
+        visited.add(edge)
+
+        cx, cy = nx, ny
+
+    return len(visited)
