@@ -27,16 +27,32 @@ def validate(s) -> bool:
     
     return len(stack) == 0
 
-def solution(s):
-    count = 0 
+
+
+def validate2(s, offset) -> bool:
+    mapping = {')' : '(', ']' : '[', '}' : '{'}
+    opens = set(mapping.values())
+    stack = []
 
     for i in range(len(s)):
-        shifted = s[i:] + s[:i]
-        if validate(shifted):
-            count += 1
+        char = s[(i + offset) % len(s)]
+        if char in opens:
+            stack.append(char)
+            continue
+        
+        if len(stack) == 0:
+            return False
+        
+        if stack.pop() != mapping.get(char):
+            return False
+    
+    return len(stack) == 0
 
-    return count
+def solution(s):
+    return sum(validate(s[i:] + s[:i]) for i in range(len(s)))
 
+def solutionv2(s):
+    return sum(validate2(s, i) for i in range(len(s)))
 
 
 
