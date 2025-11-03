@@ -6,6 +6,9 @@ description: When reviewing coding test solutions. This Skill reviews coding tes
 # CoTe Reviewer
 
 ## Instructions
+
+# IMPORTANT : '회고' 영역은 사용자가 직접 작성하는 곳입니다.
+
 1. 코딩 테스트 문제 풀이를 제출하면, 코드를 검토합니다.
 2. 문제 풀이 폴더에 있는 README.md 파일에 분석 내용을 추가합니다.
 3. 파일 하단에 새로운 섹션을 추가하여 다음 항목들을 포함하여 평가를 작성합니다:
