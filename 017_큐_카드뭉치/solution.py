@@ -33,3 +33,37 @@ def solutionv2(decks, goal):
         if not found:
             return 'No'
     return 'Yes'
+
+# 카드 덱이 2개 이상인 상황에 특화된 코드
+def solutionv3(cards1, cards2, goal):
+    decks = [cards1, cards2]
+    for want in goal:
+
+        found = False
+        for card_deck in decks:
+            if card_deck and card_deck[0] == want:
+                card_deck.pop(0)
+                found = True
+                break
+
+        if not found:
+            return 'No'
+
+    return 'Yes'
+
+# 큐 자료구조를 활용한 풀이
+def solutionv4(cards1, cards2, goal):
+    from collections import deque
+
+    deck1 = deque(cards1)
+    deck2 = deque(cards2)
+
+    for want in goal:
+        if deck1 and deck1[0] == want:
+            deck1.popleft()
+        elif deck2 and deck2[0] == want:
+            deck2.popleft()
+        else:
+            return 'No'
+
+    return 'Yes'
