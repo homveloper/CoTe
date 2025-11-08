@@ -1,6 +1,6 @@
 ---
 name: cote-reviewer
-description: When reviewing coding test solutions. This Skill reviews coding test solutions and provides feedback. it adds an evaluation section to the README.md file in the problem-solving folder, including areas for improvement, strengths, and other application ideas based on the provided template.
+description: When reviewing coding test solutions. This Skill reviews coding test solutions and provides feedback. it adds an evaluation section to the README.md file in the problem-solving folder, including areas for improvement, strengths, and other application ideas based on the provided template. Use this skill when user requests "코테 리뷰", "풀이 리뷰", "리뷰 작성", "리뷰를 작성해줘", "코드 리뷰", or any similar coding test review request.
 ---
 
 # CoTe Reviewer
@@ -16,6 +16,7 @@ description: When reviewing coding test solutions. This Skill reviews coding tes
    - 잘한 점
    - 다른 응용 방안
    - 종합 평가
+4. 알고리즘 문제인 경우, 학습 자료로써 도움이 될 수 있는 개념 및 설명등의 추가 정보를 제공합니다.
   
 자세한 사용 방법은 '_template/README.md' 파일의 '평가' 섹션을 참고하세요.
 포함하는 항목들은 예시일뿐 해당 문제와 사용자의 풀이 방식에 따라 조정될 수 있습니다.
@@ -29,7 +30,7 @@ Show concrete examples of using this Skill.
 
 **Input:**
 ```markdown
-# [방문길이]
+# [문제이름]
 - [문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/49994)
 
 ... (rest of the README content) ...
@@ -45,4 +46,8 @@ Show concrete examples of using this Skill.
 ## 잘한 점
 - set 자료구조를 활용하여 중복 경로를 효과적으로 처리한 점이 매우 좋습니다.
 - 함수에서 tuple을 반환하고 언패킹하는 방식을 사용하여 코드의 간결성을 높인 점이 인상적입니다.
+
+# 추가 학습
+
+- 좌표 이동 문제에서 방향 벡터를 활용하는 방법은 매우 유용한 기법입니다. 이를 통해 다양한 경로 탐색 문제에 적용할 수 있습니다.
 ```
