@@ -26,18 +26,8 @@ test_cases = [
     # 단일 매개변수: 리스트, 문자열, 숫자 등 (그대로 전달)
     {
         "name": "테스트케이스 1",
-        "input": [1, 2, 3],  # 리스트 = solution([1, 2, 3])으로 호출
-        "expected": [1, 2, 3],
-    },
-    {
-        "name": "테스트케이스 2",
-        "input": [3, 2, 1],  # 리스트 = solution([3, 2, 1])으로 호출
-        "expected": [1, 2, 3],
-    },
-    {
-        "name": "테스트케이스 3",
-        "input": [1],  # 리스트 = solution([1])으로 호출
-        "expected": [1],
+        "input": ['Enter uid1234 Muzi', 'Enter uid4567 Prodo', 'Leave uid1234', 'Enter uid1234 Prodo', 'Change uid4567 Ryan'],
+        "expected": ['Prodo님이 들어왔습니다.', 'Ryan님이 들어왔습니다.', 'Prodo님이 나갔습니다.', 'Prodo님이 들어왔습니다.'],
     },
     # 아래에 추가
 ]
