@@ -42,13 +42,14 @@ test_cases = [
     # 아래에 추가
 ]
 
-from solution import solution
+from solution import solution, solutionv2
 
 # ============================================================
 # 테스트 실행 (수정 금지)
 # ============================================================
 if __name__ == "__main__":
     run_tests(solution, test_cases)
+    run_tests(solutionv2, test_cases)
 
     # 다른 구현으로 테스트하려면:
     # def my_solution(nums):
