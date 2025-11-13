@@ -19,6 +19,7 @@ description: When reviewing coding test solutions. This Skill reviews coding tes
    - 개선할 점
    - 잘한 점
    - 다른 응용 방안
+   - 다른 추천 문제 : 해당 문제와 유사하거나, 학습을 확장할 수 있는 문제를 추천합니다.
    - 종합 평가
 5. 알고리즘 문제인 경우, 학습 자료로써 도움이 될 수 있는 개념 및 설명등의 추가 정보를 제공합니다.
   
