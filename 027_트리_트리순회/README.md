@@ -84,44 +84,46 @@ def solution(nodes):
 
 ### 개선할 점
 
-**1. 코드 중복 (DRY 원칙)**
-- 세 개의 순회 함수가 거의 동일한 구조를 가지고 있습니다.
-- 공통 로직을 추출하여 하나의 일반화된 함수로 만들 수 있습니다:
-
-```python
-def traverse(nodes, mode='preorder'):
-    """
-    mode: 'preorder', 'inorder', 'postorder'
-    """
-    result = []
-
-    def inner(idx):
-        if idx >= len(nodes):
-            return
-
-        if mode == 'preorder':
-            result.append(str(nodes[idx]))
-
-        inner(idx*2 + 1)
-
-        if mode == 'inorder':
-            result.append(str(nodes[idx]))
-
-        inner(idx*2 + 2)
-
-        if mode == 'postorder':
-            result.append(str(nodes[idx]))
-
-    inner(0)
-    return " ".join(result)
-```
-
-**2. 불필요한 str() 변환**
+**1. 불필요한 str() 변환 시점**
 - `result.append(str(nodes[idx]))`를 매번 호출하는 것보다
 - `" ".join(map(str, result))`로 마지막에 한 번만 변환하는 것이 더 효율적입니다.
 
-**3. 함수명 개선**
-- `inner`라는 이름보다 `traverse` 또는 `visit`이 의미를 더 명확히 전달합니다.
+```python
+def preorder(nodes):
+    result = []
+    def inner(idx):
+        if idx >= len(nodes):
+            return
+        result.append(nodes[idx])  # 정수 그대로 저장
+        inner(idx*2 + 1)
+        inner(idx*2 + 2)
+    inner(0)
+    return " ".join(map(str, result))  # 마지막에 한 번만 변환
+```
+
+**2. 함수명 개선 (선택사항)**
+- `inner`보다 `traverse` 또는 `visit`이 의미를 더 명확히 전달합니다.
+- 하지만 **현재도 충분히 명확**하므로 우선순위는 낮습니다.
+
+**❌ 피해야 할 것: 과도한 통합**
+- 세 함수가 비슷해 보여도 **각각 독립적으로 두는 것이 낫습니다**.
+- 하나로 통합하면 오히려 각 순회의 **논리적 구조가 불명확**해집니다:
+
+```python
+# ❌ 나쁜 예: 순회 패턴이 if문으로 흩어짐
+def traverse(nodes, mode):
+    def inner(idx):
+        if mode == 'preorder': result.append(...)  # 🚨 분산
+        inner(idx*2 + 1)
+        if mode == 'inorder': result.append(...)   # 🚨 분산
+        inner(idx*2 + 2)
+        if mode == 'postorder': result.append(...) # 🚨 분산
+```
+
+현재 구조가 더 좋습니다:
+- ✅ 전위/중위/후위의 **차이가 한눈에 보임**
+- ✅ 각 순회의 **본질적 구조를 정확히 표현**
+- ✅ **교육적으로 우수** (학습용 코드)
 
 ### 잘한 점
 
@@ -203,17 +205,20 @@ def levelorder(nodes):
 
 이 풀이는 **트리 순회의 기본 개념을 정확히 이해**하고 있으며, **클로저를 활용한 깔끔한 구현**이 돋보입니다. 특히 배열 기반 완전 이진 트리의 인덱스 관계를 정확히 파악하고 재귀로 구현한 점이 우수합니다.
 
-다만 **코드 중복**이 아쉬운 부분입니다. 세 개의 순회 함수가 거의 동일한 구조를 가지고 있어 DRY(Don't Repeat Yourself) 원칙을 위배합니다. 실무에서는 유지보수성을 위해 공통 로직을 추출하는 것이 중요합니다.
+**구조적 선택의 적절성:**
+- 세 개의 순회 함수를 독립적으로 유지한 것은 **올바른 선택**입니다.
+- 각 순회 방식의 **논리적 구조가 명확**하게 드러나 교육적으로 우수합니다.
+- 과도한 통합은 오히려 알고리즘의 본질을 흐릴 수 있습니다.
 
-또한 **str() 변환 시점**을 최적화할 수 있습니다. 매번 append 시 변환하기보다 마지막에 `map(str, result)`를 사용하면 더 pythonic하고 효율적입니다.
+미세한 개선 여지는 **str() 변환 시점** 정도입니다. 매번 append 시 변환하기보다 마지막에 `map(str, result)`를 사용하면 약간 더 효율적입니다. 하지만 이는 마이크로 최적화 수준이고, 현재 코드도 충분히 명확하고 효율적입니다.
 
 **학습 관점에서의 평가:**
 - ✅ 전위/중위/후위 순회 개념을 명확히 이해
 - ✅ 재귀의 기본 패턴(종료 조건 + 재귀 호출) 숙지
 - ✅ 파이썬 클로저 활용 능력 향상
-- ⚠️ 코드 리팩토링 및 일반화 능력은 더 발전시킬 여지가 있음
+- ✅ **알고리즘의 의미를 코드 구조로 표현** (각 순회의 차이가 명확)
 
-트리 구조의 기초를 다지는 **몸풀기 문제로서 충분히 목표를 달성**했습니다. 다음 단계로는 노드 클래스 기반 트리 구현, 불완전 트리 처리, 그리고 트리 순회를 활용한 복잡한 문제 해결로 나아가시길 추천합니다.
+트리 구조의 기초를 다지는 **몸풀기 문제로서 완벽히 목표를 달성**했습니다. 코드의 가독성과 의미 전달력이 뛰어나며, 학습용 구현으로서 모범적입니다. 다음 단계로는 노드 클래스 기반 트리 구현, 불완전 트리 처리, 그리고 트리 순회를 활용한 복잡한 문제 해결로 나아가시길 추천합니다.
 
 ## 추가 학습
 
@@ -290,6 +295,157 @@ def iterative_preorder(nodes):
 
     return " ".join(result)
 ```
+
+### 반복문 순회가 어려운 이유와 시각화
+
+#### 왜 반복문이 재귀보다 어려운가?
+
+**재귀는 "자연스럽다"**
+- 함수 호출 = 트리 탐색
+- 컴파일러가 자동으로 콜스택 관리
+- "어디로 돌아가야 하는지" 자동 기억
+```python
+def preorder(node):
+    print(node)      # 루트
+    preorder(left)   # 왼쪽 (자동으로 여기로 돌아옴)
+    preorder(right)  # 오른쪽
+```
+
+**반복문은 "수동"**
+- 스택을 명시적으로 조작
+- "언제 노드를 처리할지" 타이밍을 수동으로 제어
+- 특히 중위/후위는 **"자식을 먼저 보고 나중에 처리"**해야 해서 복잡
+
+#### 트리 구조 (예시)
+```
+      1
+     / \
+    2   3
+   / \
+  4   5
+
+배열: [1, 2, 3, 4, 5]
+```
+
+#### 전위 순회 (Preorder) 스택 변화
+
+**전략**: 루트 즉시 처리 → 오른쪽 먼저 push (LIFO)
+
+```mermaid
+graph TD
+    subgraph "Step 1: 시작"
+        S1["stack: [1]<br/>result: []"]
+    end
+
+    subgraph "Step 2: pop(1)"
+        S2["처리: 1<br/>push: 3, 2<br/>stack: [3, 2]<br/>result: [1]"]
+    end
+
+    subgraph "Step 3: pop(2)"
+        S3["처리: 2<br/>push: 5, 4<br/>stack: [3, 5, 4]<br/>result: [1, 2]"]
+    end
+
+    subgraph "Step 4: pop(4)"
+        S4["처리: 4<br/>자식 없음<br/>stack: [3, 5]<br/>result: [1, 2, 4]"]
+    end
+
+    subgraph "Step 5: pop(5)"
+        S5["처리: 5<br/>자식 없음<br/>stack: [3]<br/>result: [1, 2, 4, 5]"]
+    end
+
+    subgraph "Step 6: pop(3)"
+        S6["처리: 3<br/>자식 없음<br/>stack: []<br/>result: [1, 2, 4, 5, 3]"]
+    end
+
+    S1 --> S2 --> S3 --> S4 --> S5 --> S6
+```
+
+**핵심**:
+- ✅ pop하자마자 즉시 처리
+- ✅ 오른쪽을 먼저 push → LIFO로 왼쪽이 먼저 처리됨
+
+#### 중위 순회 (Inorder) 스택 변화
+
+**전략**: 왼쪽 끝까지 push → pop하며 처리 → 오른쪽으로
+
+```mermaid
+graph TD
+    subgraph "Step 1: 왼쪽 끝까지"
+        I1["current: 1 → 2 → 4<br/>stack: [1, 2, 4]<br/>result: []"]
+    end
+
+    subgraph "Step 2: pop(4)"
+        I2["처리: 4<br/>오른쪽 없음<br/>stack: [1, 2]<br/>result: [4]"]
+    end
+
+    subgraph "Step 3: pop(2)"
+        I3["처리: 2<br/>current: 5로 이동<br/>stack: [1]<br/>result: [4, 2]"]
+    end
+
+    subgraph "Step 4: 5 처리"
+        I4["처리: 5<br/>오른쪽 없음<br/>stack: [1]<br/>result: [4, 2, 5]"]
+    end
+
+    subgraph "Step 5: pop(1)"
+        I5["처리: 1<br/>current: 3으로 이동<br/>stack: []<br/>result: [4, 2, 5, 1]"]
+    end
+
+    subgraph "Step 6: 3 처리"
+        I6["처리: 3<br/>자식 없음<br/>stack: []<br/>result: [4, 2, 5, 1, 3]"]
+    end
+
+    I1 --> I2 --> I3 --> I4 --> I5 --> I6
+```
+
+**핵심**:
+- ⚠️ 왼쪽 끝까지 내려가며 스택에 쌓음
+- ⚠️ pop할 때 처리 (왼쪽 자식들을 먼저 본 후)
+- ⚠️ 그 다음 오른쪽 서브트리로 이동
+
+#### 후위 순회 (Postorder) 스택 변화 - 두 스택 방식
+
+**전략**: 전위의 반대(루트→오→왼) 만들고 역순으로
+
+```mermaid
+graph TD
+    subgraph "Phase 1: stack1 처리 (전위 반대)"
+        P1["stack1: [1]<br/>stack2: []"]
+        P2["pop(1) → stack2<br/>push: 2, 3<br/>stack1: [2, 3]<br/>stack2: [1]"]
+        P3["pop(3) → stack2<br/>자식 없음<br/>stack1: [2]<br/>stack2: [1, 3]"]
+        P4["pop(2) → stack2<br/>push: 4, 5<br/>stack1: [4, 5]<br/>stack2: [1, 3, 2]"]
+        P5["pop(5) → stack2<br/>stack1: [4]<br/>stack2: [1, 3, 2, 5]"]
+        P6["pop(4) → stack2<br/>stack1: []<br/>stack2: [1, 3, 2, 5, 4]"]
+    end
+
+    subgraph "Phase 2: stack2 역순 출력"
+        P7["stack2를 pop하면<br/>후위 순회 완성!<br/>result: [4, 5, 2, 3, 1]"]
+    end
+
+    P1 --> P2 --> P3 --> P4 --> P5 --> P6 --> P7
+```
+
+**핵심**:
+- 🎯 전위: 루트 → 왼 → 오 (1 2 4 5 3)
+- 🎯 반대: 루트 → 오 → 왼 (1 3 2 5 4)
+- 🎯 역순: **왼 → 오 → 루트 (4 5 2 3 1)** ✅
+
+#### 비교 요약
+
+| 순회 | 노드 처리 타이밍 | 난이도 | 핵심 트릭 |
+|------|-----------------|--------|----------|
+| **전위** | pop 즉시 처리 | ⭐ 쉬움 | 오른쪽 먼저 push |
+| **중위** | 왼쪽 끝 도달 후 | ⭐⭐ 중간 | 왼쪽 끝까지 내려가기 |
+| **후위** | 양쪽 자식 처리 후 | ⭐⭐⭐ 어려움 | 두 스택 or 방문 플래그 |
+
+**왜 후위가 가장 어려운가?**
+- 자식들을 **먼저** 처리하고 부모를 **나중에** 처리
+- "이 노드의 자식을 다 봤는지" 판단 필요
+- 방문 플래그 또는 두 스택 같은 추가 장치 필요
+
+**실전 팁**:
+- 코딩테스트에서는 재귀 사용 (압도적으로 간단)
+- 반복문은 재귀 깊이 제한 문제가 있을 때만
+- 면접에서 반복문 구현을 물어볼 수 있으니 이해는 필요
 
 ---
 **복잡도**:
