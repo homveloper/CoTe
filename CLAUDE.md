@@ -275,7 +275,14 @@ When reviewing solutions, prioritize:
 2. **Code Clarity**
    - Clear variable names
    - Logical problem-solving flow
-   - Comments for non-obvious logic
+   - **Comments and Documentation**:
+     - Comments are a critical part of the problem-solving process
+     - They record the thought process and prevent forgetting key ideas during implementation
+     - Evaluate comments as an important feedback element in code reviews
+     - **Good comments**: Clear core ideas, approach methods, constraints, and edge cases
+     - **Comments to improve**: Inconsistent with code, incorrect concepts, too vague
+     - **Note**: Having many comments is NOT a problem - it's a good habit for organizing the solution process
+     - Focus on comment quality (clarity, accuracy) rather than quantity
 
 3. **Edge Cases**
    - Empty inputs
@@ -335,6 +342,12 @@ When assisting with this repository:
 4. **Repo Maintenance**: Help update main README index when problems are added
 5. **Learning Support**: Suggest algorithmic patterns and optimization opportunities
 6. **Language**: Use Korean for documentation and explanations; Python code can use English variable names
+7. **Comment Evaluation**:
+   - Recognize comments as an essential part of the learning and problem-solving process
+   - DO NOT criticize code for having "too many comments" or being "verbose"
+   - Instead, evaluate whether comments clearly capture the problem-solving approach
+   - Provide feedback on comment quality: accuracy, clarity, and usefulness for future review
+   - Encourage thoughtful commenting as it helps solidify understanding and aids future revisits
 
 ## No Special Setup Required
 
